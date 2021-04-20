@@ -41,7 +41,7 @@ GeoJson file used to get map is soured from [here](https://github.com/OpenDataDE
 
 ## Column Names and descriptions for Kings County Data Set
 
-As the readme file accompanying the dataset.
+As per the readme file accompanying the dataset.
 
 * **id** - unique identified for a house
 * **dateDate** - house was sold
@@ -80,7 +80,7 @@ These are the data that I worked with.
            'lat', 'long', 'sqft_living15', 'sqft_lot15'],
           dtype='object')
 
-shape of the data.(21597, 21)
+Shape of the data is (21597, 21)
 
 
 Then checked for outliers. I seems that there are many.
@@ -133,7 +133,7 @@ df = df[df['bedrooms']!=33]
 df = df.reset_index().drop('index', axis=1, errors='ignore')
 ```
 
-## Features 
+## Features added
 ### Price per sqft
 
 Ratio of price of each house over total sqft of that.
@@ -147,7 +147,7 @@ df['price_per_sqft'] = round(df['price']/(df['sqft_lot']+df['sqft_living']),2)
 
 ### Neighborhood
 
-boolean feature to check that Total sqft of n is with in 40% to 60% range of average of total sqft of surrounding 15 house to detect unusual house in the neighborhood. Check for unusual homes.
+boolean feature to check that Total sqft of a house is within 40% to 60% range of average of total sqft of surrounding 15 house to detect unusual house in the neighborhood. This is a check for unusual homes.
 
 
 ```python
@@ -232,51 +232,11 @@ df_model = df.drop(columns=['id', 'date','yr_renovated','view'])
 ### Feature correlation and multicollinearity 
 
 
-```python
-# correlation of features of entire dataset
-```
-
-    Positive correlations:
-       index                  feature_combo  correlation
-    0    566  is_renovated and yr_renovated     0.999968
-    1    359  yr_renovated and is_renovated     0.999968
-    2    107     sqft_above and sqft_living     0.876534
-    3    106          grade and sqft_living     0.762474
-    4    251           grade and sqft_above     0.756217
-    5    114  sqft_living15 and sqft_living     0.756184
-    6     76      bathrooms and sqft_living     0.755519
-    7    282   sqft_living15 and sqft_above     0.731877
-    8    139        sqft_lot and sqft_lot15     0.717742
-    9    258        sqft_living15 and grade     0.713173
-    
-    ----------------------------------------------------------------------
-    Negative correlations:
-       index                                   feature_combo  correlation
-    0    496             distance_from_downtown_mile and lat    -0.595645
-    1    404             lat and distance_from_downtown_mile    -0.595645
-    2    377                                zipcode and long    -0.564772
-    3    501  price_per_sqft and distance_from_downtown_mile    -0.561403
-    4    380         zipcode and distance_from_downtown_mile    -0.519708
-    5    229                          condition and yr_built    -0.365092
-    6    327                            zipcode and yr_built    -0.346151
-    7    429                         price_per_sqft and long    -0.308950
-    8     44           price and distance_from_downtown_mile    -0.286815
-    9    477                   price_per_sqft and sqft_lot15    -0.280734
-    
-
-
-```python
-# correlation among seleted features for model
-top_correlated_features(df_model,verbose=True)
-```
 
 ### Heatmap
 
 
-```python
-heatmap_DataFrame(df_model)
-```
-
+Here is a heat map of correlation.
 
     
 ![png](./assets/output_67_0.png)
@@ -285,14 +245,14 @@ heatmap_DataFrame(df_model)
 
 Only sqft features are collinear in nature. This is expected. and has a relationship with grade. Leaving it as it is right now.
 
-#### View - what is it?
+### View - what is it?
 
     
 ![png](./assets/output_70_0.png)
     
 
 
-Now trying to make sense of `"view"`. It seems like it detects the aesthetic quality of the house. Not sure if it is something a owner can manipulate, e.g. architectural design or landscaping and decoration; or its is natural, e.g. close to a park.
+Now I tried to make sense of `"view"`. It seems like it detects the aesthetic quality of the house. Not sure if it is something that a owner can manipulate, e.g. architectural design or landscaping and decoration; or its is natural, e.g. close to a park or view from window.
 
 Higher rated house has the greatest average price. This trend is very clear.
 
@@ -306,16 +266,16 @@ This feature is still sufficiently ambiguous to present to the public, I might b
 
 ### Paired Feature exploration
 
-#### Price VS Year Built
+### Price VS Year Built
 
     
-![png](./assets/output_83_1.png)
+![png](./assets/output_ss.png)
     
 
 
 Hoses built in the 40's to 60's have good value. A weird situation for the beginning of 70's, maybe related to a quirk of the dataset or energy crisis of that time, more domain research is needed to comment on that. High sale frequency in the early 00's to a dip in 2008 because of the global financial crisis because of subprime mortgage situation. House prices was in a bubble that created the financial crisis. This data also supports that. This data of house price and sale coincides with all financial crisis. But across the board house price is stable. Have to look into sale date to make any further comment.
 
-#### Price VS Bedroom Count
+### Price VS Bedroom Count
 
 
 
@@ -355,9 +315,13 @@ Most expensive houses are centered around downtown Seattle.
 
     
 ![png](./assets/output_102_0.png)
-    
+
+Not all zipcodes have the same house price.
+
 ### Outlier Removal
-From the chart potential candidate for formula based out lier removal are:
+Then I decided to check the performance of IQR based and Z score based outlier removal. Based on the shape of result it seemed that IQR based removal is more appropriate here.
+
+From the chart potential candidate for formula based outlier removal are:
 - price
 - bathrooms
 - bathrooms
@@ -413,14 +377,12 @@ Across the board outlier removal by using IQR is the winner. Stats for that is:
        Data loss : 2.6159%
     ________________________________________________________________________________________________________________________________________________________________
     
-
-
     New utlier removed dataset length: 19993
     Old dataset length: 21419
     Total data loss: 6.89%
     
 
-There are few extremely big values in distance_from_downtown feature, now removing this. Thresh hold is more than 40 miles will be dropped.
+There are few extremely big values in distance_from_downtown feature, now removing this. Thresh hold is more than 40 miles was be dropped. There awere 18 outliers. So the dataset size is 19975.
 
 ### Ordinary Least Squares
 Formula that used for regression
@@ -467,43 +429,7 @@ def OLS_sm(df,
                 Modify chart axis label.
                     `True` shows information.
                     `False` does not show information.    
-    Under-The-Hood:
-    =============
-    --{Major Steps}--
-        
-        ## Regression
-        cate = ' + '.join([f'C({x})' for x in categorical_features])
-        nume = ' + '.join([f'{x}' for x in numeric_features])
-        formula = f'{dependant_var} ~ {nume} + {cate}'
-        
-        ## plots
-        # plot on the left
-        sm.qqplot(multiple_regression.resid,
-                  dist=stats.norm,
-                  line='45',
-                  fit=True,
-                  ax=ax1)
-        # plot on the right
-        ax2.scatter(x=multiple_regression.fittedvalues,
-                    y=multiple_regression.resid,
-                    s=4,
-                    color='gold')
-    
-    Note:
-    =====
-        Make sure that every column in the DataFrame has the correct dtype.
-        Numeric values stored as str (i.e, object) will make stats model assume that those are categorical variable.
-        If Erros, check df to see if the passed feature is available in the DataFrame.
-    
-    Issues:
-    =======
-        - Output control is not clear.
-    
-    Changelog:
-    ==========
-        - fixed `resid`, was using `resid_pearson`.
-    
-    -- ver: 1.2 --
+
     """
     cate = ' + '.join([f'C({x})' for x in categorical_features])
     nume = ' + '.join([f'{x}' for x in numeric_features])
@@ -557,7 +483,7 @@ def OLS_sm(df,
 
 Lets take a quick look at a regression.
 
->>> With outlier
+ With outlier
 
 
 
@@ -925,7 +851,7 @@ Lets take a quick look at a regression.
     
 
 
-
+And with out outlier.
 ```python
 x2 = OLS_sm(df=df_model_2,
               numeric_features=[
@@ -1309,7 +1235,9 @@ x2 = OLS_sm(df=df_model_2,
 
 ### Consider the above one as base model
 
-It has features with high p value, and residual plots are very abnormal.
+It has several features with high p value, and residual plots are very abnormal.
+
+To get a better result then I scaled data.
 
 ## Scaling
 
@@ -1319,6 +1247,7 @@ This matches the dataset characteristics.
 
 
 Then I scaled data based on mean and IQR range
+
 
 A few sample of those are here.
 
@@ -1344,6 +1273,9 @@ A few sample of those are here.
 
 ```python
 def correlation_feat(df, threshold=0.75):
+  """
+  Returns corelated features.
+  """
     feature_corr = set()  # Set of all the names of correlated columns
     corr_matrix = df.corr()
     for i in range(len(corr_matrix.columns)):
@@ -1367,8 +1299,8 @@ print('correlated features: ', corr_features)
     
 
 
-Dropping `sqft_above` from the data set. also dropping redundant location feature `lat` and `long` and `zipcode` and price_per_sqft. After getting impact of this, might drop it later.
-Also dropped `price_per_sqft' ater findind out it was leaking information. Addind this will see a dramatic performance improvent of the model r_sq. But colinearity is a issue. 
+Dropping `sqft_above` from the data set. Also dropping redundant location feature `lat` and `long` and `zipcode` and price_per_sqft. After getting impact of this, might drop it later.
+Also dropped `price_per_sqft` ater finding out it was leaking information. Adding this will see a dramatic performance improvent of the model r_sq. But colinearity is a issue, althoug can not detect it in the final model. 
 
 
 
@@ -1465,9 +1397,9 @@ def forward_selected(data, response):
 ```python
 def catch_forward_selected_steps(data, response):
     """
-    Optimal feature selection helper formula.
+    +++ Optimal feature selection helper formula. +++
     
-    modified from
+    modified from the previous one. cathes the sets for analysis.
     Source: https://planspace.org/20150423-forward_selection_with_statsmodels/
     __________________________________________________________________________
     """
@@ -1496,22 +1428,16 @@ def catch_forward_selected_steps(data, response):
     return li
 ```
 
-Applying one of that to get insight.
+Displaying one of those to get insight.
 
     
 ![png](./assets/output_197_1.png)
     
 
 
-Optimal number of features where diminishing return starts to occur.
+Optimal number of features where diminishing return starts to occur is at around 8.
 
 
-```python
-model = forward_selected(df_model_processed_ohe, 'price')
-print(model.model.formula)
-print(model.rsquared_adj)
-model.summary()
-```
 
 ### Hybrid feature Elimination
 
@@ -1520,20 +1446,10 @@ model.summary()
 
 ```python
 from sklearn.feature_selection import RFE
-```
 
-
-```python
 X = df_model_processed_ohe.drop(columns='price').copy()
-```
-
-
-```python
 y = df_model_processed_ohe['price'].copy()
-```
 
-
-```python
 linreg = LinearRegression(n_jobs=8)
 selector = RFE(linreg ,n_features_to_select=6) 
 selector = selector.fit(X, y.values.ravel())
@@ -1574,7 +1490,9 @@ features_selection = pd.DataFrame(list(
                                    columns=['Feature', 'keep', 'ranking'])
 features_selection.sort_values(by="ranking", ascending=True)
 ```
-
+```
+This is the feature ranking report.
+```
 
 
 
@@ -1801,10 +1719,8 @@ features_selection.Feature.to_list()
 
 
 
+Then I tested a model with these insights.
 
-```python
-fin1 = OLS_sm(df=df_model_processed_ohe,numeric_features=features_selection.Feature.to_list())
-```
 
     Formula for the OLS model:  price ~ bedrooms + bathrooms + sqft_living + sqft_lot + floors + sqft_basement + yr_built + sqft_living15 + sqft_lot15 + distance_from_downtown_mile + waterfront_1 + condition_1 + condition_0 + condition_1 + condition_2 + grade_3 + grade_2 + grade_1 + grade_0 + grade_1 + grade_2 + grade_3 + grade_4 + grade_5 + is_renovated_1 + total_sqft_larger_than_neighbours_1
     
@@ -1946,7 +1862,7 @@ fin1 = OLS_sm(df=df_model_processed_ohe,numeric_features=features_selection.Feat
     
 ![png](./assets/output_212_2.png)
     
-Few high p_value detected.
+Few high p_value detected. So dropped those.
 
 
 
@@ -2092,6 +2008,7 @@ NOTE: Adding back other features like "zipcode" and "view" can have a huge impac
 
 ## Some experiments
 
+Run few models from the insight gained from those.
 
 ```python
 RFE_recom = ['waterfront','grade','sqft_living','distance_from_downtown_mile','is_renovated','sqft_living15','condition','yr_built']
@@ -2102,7 +2019,7 @@ RFE_recom = ['waterfront','grade','sqft_living','distance_from_downtown_mile','i
 Forward_selection = ['sqft_living','distance_from_downtown_mile','sqft_living15','grade','yr_built','sqft_lot','condition' ]
 ```
 
-Creating a list based on the recommendations of RFE and Forward selection. Does RFE works well on categorial data liner regression? I am using these as tool for prediction rather than building a unattended pipeline. Useing them as a guide.
+Creating a list based on the recommendations of RFE and Forward selection. D
 
 
 ```python
@@ -2123,7 +2040,7 @@ set(RFE_recom + Forward_selection)
      'yr_built'}
 
 
-
+## Experiment 1
 
 ```python
 fin = OLS_sm(
@@ -2261,9 +2178,10 @@ fin = OLS_sm(
 
 
 
-Dropping these for next iteration of model.
+Some high p value detected. Dropping these for next iteration of model.
 
 
+## Experiment 2
 ```python
 fin = OLS_sm(
     df=df_model_2,
@@ -2362,10 +2280,10 @@ fin = OLS_sm(
 
 
 
-
+## Final model
 I can go on doing this. But This is my final model. As there is no other significant p values left. And swapping features not going to help beyond this, as I already hit the diminishing return point. 
 
-Being said that I am throwing condition in the mix. removed waterfront as there is less control over that and removed yr_built as a result of high p_val. Most importantly it is recommended by RFE.
+Being said that I am throwing condition in the mix. removed waterfront as there is less control over that and removed yr_built as a result of high p_val. Most importantly, because it is recommended by RFE.
 
 
 ```python
@@ -2551,7 +2469,8 @@ round(pd.DataFrame(final.params).sort_values(by=0,ascending=False),2)
 
 # iNTERPRET
 
-Accuracy of this model is around 61% indicated by r square. None of them have significant p value. No collinearity detected. 
+Accuracy of this model is around 61% indicated by r square. None of them have significant p value. No multicollinearity detected. Resedual plots are somewhat exceptable for what type of data it is. There is some bias in the model.
+
 Now looking at the betas I can see the relationships: 
 ___
 | Feature                              | Intercept (beta_1) | Comment                                                                                           | can control? |
