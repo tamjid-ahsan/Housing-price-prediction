@@ -92,8 +92,7 @@ Then checked for outliers. I seems that there are many.
     
 
 
-    
-![png](output_19_1.png)
+![png](./assets/output_19_1.png)
     
 
 ## Initial cleaning
@@ -280,7 +279,7 @@ heatmap_DataFrame(df_model)
 
 
     
-![png](output_67_0.png)
+![png](./assets/output_67_0.png)
     
 
 
@@ -289,7 +288,7 @@ Only sqft features are collinear in nature. This is expected. and has a relation
 #### View - what is it?
 
     
-![png](output_70_0.png)
+![png](./assets/output_70_0.png)
     
 
 
@@ -310,7 +309,7 @@ This feature is still sufficiently ambiguous to present to the public, I might b
 #### Price VS Year Built
 
     
-![png](output_83_1.png)
+![png](./assets/output_83_1.png)
     
 
 
@@ -321,7 +320,7 @@ Hoses built in the 40's to 60's have good value. A weird situation for the begin
 
 
     
-![png](output_86_1.png)
+![png](./assets/output_86_1.png)
     
 
 
@@ -342,7 +341,7 @@ Increased bedroom count has a diminishing return after a certain thresh hold, wh
 
 
     
-![png](output_97_0.png)
+![png](./assets/output_97_0.png)
     
 
 
@@ -355,7 +354,7 @@ Most expensive houses are centered around downtown Seattle.
 
 
     
-![png](output_102_0.png)
+![png](./assets/output_102_0.png)
     
 ### Outlier Removal
 From the chart potential candidate for formula based out lier removal are:
@@ -375,7 +374,7 @@ And for manual outlier removal:
 
 
 One sample of that process
-![png](output_111_17.png)
+![png](./assets/output_111_17.png)
     
 
 
@@ -922,7 +921,7 @@ Lets take a quick look at a regression.
 
 
     
-![png](output_128_2.png)
+![png](./assets/output_128_2.png)
     
 
 
@@ -1300,7 +1299,7 @@ x2 = OLS_sm(df=df_model_2,
 
 
     
-![png](output_131_2.png)
+![png](./assets/output_131_2.png)
     
 
 
@@ -1329,13 +1328,13 @@ A few sample of those are here.
 
 
     
-![png](output_147_0.png)
+![png](./assets/output_147_0.png)
     
 
 
 
     
-![png](output_147_1.png)
+![png](./assets/output_147_1.png)
     
 
 
@@ -1504,7 +1503,7 @@ def catch_forward_selected_steps(data, response):
 Applying one of that to get insight.
 
     
-![png](output_197_1.png)
+![png](./assets/output_197_1.png)
     
 
 
@@ -1949,7 +1948,7 @@ fin1 = OLS_sm(df=df_model_processed_ohe,numeric_features=features_selection.Feat
 
 
     
-![png](output_212_2.png)
+![png](./assets/output_212_2.png)
     
 Few high p_value detected.
 
@@ -2083,7 +2082,7 @@ fin1 = OLS_sm(df=df_model_processed_ohe,numeric_features=['bedrooms',
 
 
     
-![png](output_214_2.png)
+![png](./assets/output_214_2.png)
     
 
 
@@ -2272,7 +2271,7 @@ fin = OLS_sm(
 
 
     
-![png](output_224_2.png)
+![png](./assets/output_224_2.png)
     
 
 
@@ -2482,7 +2481,7 @@ fin = OLS_sm(
 
 
     
-![png](output_227_2.png)
+![png](./assets/output_227_2.png)
     
 
 
@@ -2612,7 +2611,7 @@ check_for_high_p_val(fin)
 
 
     
-![png](output_231_3.png)
+![png](./assets/output_231_3.png)
     
 
 
