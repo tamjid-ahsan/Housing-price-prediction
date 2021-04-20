@@ -1265,7 +1265,7 @@ A few sample of those are here.
 
 
 
-
+I have got two versions of these. One with everything encoded. One with target variable unscaled, which makes results interpretable in plain language. Only used that in the last model.
 
 ## Check for multicolinerity
 
@@ -1306,7 +1306,7 @@ Also dropped `price_per_sqft` ater finding out it was leaking information. Addin
 
 ## One Hot Encoding
 
-Then I one hot encoded the data for later use.
+Then I one hot encoded the data for later use. I got two versions of this.
 
 
 ## Feature selection
@@ -1435,7 +1435,7 @@ Displaying one of those to get insight.
     
 
 
-Optimal number of features where diminishing return starts to occur is at around 8.
+Optimal number of features where diminishing return starts to occur is at around 8. Also got a list of recommendation.
 
 
 
@@ -2526,7 +2526,7 @@ Then they can observe a substantial improvement of their house value.
 <br>
 If I had the gift of time.
 
-I would like to, in no particular order:
+I would like to go through these steps, in no particular order:
 
 - data collecting
  - try a model with unscaled dependent variable; price and see the impact on model performance. That will help me better explain the data. But if not reporting those the the sign alone is enough. 
@@ -2543,11 +2543,6 @@ I would like to, in no particular order:
  * make train-test split and compare predictive power.
  * use some other metric other than r square. e.g. RMSE, p value, coefficients.
  * try other features in in model. go for an exhaustive search. 
-
-- Functional
- * work on visuals, although wasted a lot of time doing this, mapping and what not.
- * ""functionize" EVERYTHING." - James M. Irving. On the same note - refine docstrings.
- * change naming convention of variables a bit
 
 <br>
 And the list goes on, I am stopping now. Almost nothing is perfect. The question is, is it good enough?
