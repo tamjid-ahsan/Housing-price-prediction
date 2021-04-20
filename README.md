@@ -1304,10 +1304,6 @@ x2 = OLS_sm(df=df_model_2,
 
 
 
-```python
-check_for_high_p_val(x2)
-```
-
 
 
 
@@ -2087,18 +2083,6 @@ fin1 = OLS_sm(df=df_model_processed_ohe,numeric_features=['bedrooms',
 
 
 
-```python
-check_for_high_p_val(fin1)
-```
-
-
-
-
-<style  type="text/css" >
-</style><table id="T_3a7c6f65_a115_11eb_be5b_3024a9882581" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >features</th>        <th class="col_heading level0 col1" >p_values</th>    </tr></thead><tbody>
-        </tbody></table>
-
-
 
 Best by RFE but, can not take partial condition.
 
@@ -2276,116 +2260,6 @@ fin = OLS_sm(
 
 
 
-```python
-check_for_high_p_val(fin)
-```
-
-
-
-
-<style  type="text/css" >
-#T_3aeff30d_a115_11eb_9e37_3024a9882581row0_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row1_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row2_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row3_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row4_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row5_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row6_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row7_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row8_col0,#T_3aeff30d_a115_11eb_9e37_3024a9882581row9_col0{
-            background:  black;
-            color:  lawngreen;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row0_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #bb141a;
-            color:  #f1f1f1;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row1_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #fff2eb;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row2_col1,#T_3aeff30d_a115_11eb_9e37_3024a9882581row3_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #fff5f0;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row4_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #fedaca;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row5_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #fb694a;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row6_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #880811;
-            color:  #f1f1f1;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row7_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #f4503a;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row8_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #fc8767;
-            color:  #000000;
-        }#T_3aeff30d_a115_11eb_9e37_3024a9882581row9_col1{
-            background:  black;
-            color:  lawngreen;
-            background-color:  #67000d;
-            color:  #f1f1f1;
-        }</style><table id="T_3aeff30d_a115_11eb_9e37_3024a9882581" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >features</th>        <th class="col_heading level0 col1" >p_values</th>    </tr></thead><tbody>
-                <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row0" class="row_heading level0 row0" >0</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row0_col0" class="data row0 col0" >Intercept</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row0_col1" class="data row0 col1" >0.7860</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row1" class="row_heading level0 row1" >1</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row1_col0" class="data row1 col0" >C(condition)[T.-1.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row1_col1" class="data row1 col1" >0.0723</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row2" class="row_heading level0 row2" >2</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row2_col0" class="data row2 col0" >C(grade)[T.-3.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row2_col1" class="data row2 col1" >0.0529</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row3" class="row_heading level0 row3" >3</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row3_col0" class="data row3 col0" >C(grade)[T.-1.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row3_col1" class="data row3 col1" >0.0513</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row4" class="row_heading level0 row4" >4</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row4_col0" class="data row4 col0" >C(grade)[T.0.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row4_col1" class="data row4 col1" >0.1862</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row5" class="row_heading level0 row5" >5</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row5_col0" class="data row5 col0" >C(grade)[T.1.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row5_col1" class="data row5 col1" >0.5099</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row6" class="row_heading level0 row6" >6</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row6_col0" class="data row6 col0" >C(grade)[T.2.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row6_col1" class="data row6 col1" >0.9047</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row7" class="row_heading level0 row7" >7</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row7_col0" class="data row7 col0" >C(grade)[T.3.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row7_col1" class="data row7 col1" >0.5717</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row8" class="row_heading level0 row8" >8</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row8_col0" class="data row8 col0" >C(grade)[T.4.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row8_col1" class="data row8 col1" >0.4262</td>
-            </tr>
-            <tr>
-                        <th id="T_3aeff30d_a115_11eb_9e37_3024a9882581level0_row9" class="row_heading level0 row9" >9</th>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row9_col0" class="data row9 col0" >C(grade)[T.5.0]</td>
-                        <td id="T_3aeff30d_a115_11eb_9e37_3024a9882581row9_col1" class="data row9 col1" >0.9662</td>
-            </tr>
-    </tbody></table>
-
-
 
 Dropping these for next iteration of model.
 
@@ -2486,16 +2360,6 @@ fin = OLS_sm(
 
 
 
-```python
-check_for_high_p_val(fin)
-```
-
-
-
-
-<style  type="text/css" >
-</style><table id="T_3b4375b6_a115_11eb_9946_3024a9882581" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >features</th>        <th class="col_heading level0 col1" >p_values</th>    </tr></thead><tbody>
-        </tbody></table>
 
 
 
@@ -2512,7 +2376,6 @@ final = OLS_sm(
         'sqft_lot'
     ],
     categorical_features=[ 'is_renovated', 'condition'])
-check_for_high_p_val(fin)
 ```
 
     Formula for the OLS model:  price ~ distance_from_downtown_mile + sqft_living + sqft_living15 + sqft_lot + C(is_renovated) + C(condition)
@@ -2598,14 +2461,6 @@ check_for_high_p_val(fin)
   <th>Kurtosis:</th>      <td> 3.400</td>  <th>  Cond. No.          </th> <td>    474.</td>
 </tr>
 </table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-
-
-
-
-
-<style  type="text/css" >
-</style><table id="T_3b75f981_a115_11eb_b432_3024a9882581" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >features</th>        <th class="col_heading level0 col1" >p_values</th>    </tr></thead><tbody>
-        </tbody></table>
 
 
 
