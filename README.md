@@ -338,7 +338,7 @@ And for manual outlier removal:
 
 
 One sample of that process
-![png](./assets/output_111_17.png)
+![png](./assets/output_90_9.png)
     
 
 
@@ -851,7 +851,7 @@ Lets take a quick look at a regression.
     
 
 
-And with out outlier.
+And without outliers.
 ```python
 x2 = OLS_sm(df=df_model_2,
               numeric_features=[
@@ -2473,7 +2473,7 @@ Accuracy of this model is around 61% indicated by r square. None of them have si
 
 Now looking at the betas I can see the relationships: 
 ___
-| Feature                              | Intercept (beta_1) | Comment                                                                                           | can control? |
+| Feature                              | Coeffs (beta_0) | Comment                                                                                           | can control? |
 |--------------------------------------|--------------------|---------------------------------------------------------------------------------------------------|--------------|
 | Intercept                            | 330578.76          | Necessary to facilitate regression. OLS line goes through this on the y-axis                      |              |
 | C(condition)[T.2.468888440743516]    | 179403.32          | Positive relation, can expect to see this much improvement of value for every additional point    | yes          |
