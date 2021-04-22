@@ -2520,25 +2520,3 @@ I would like to go through these steps, in no particular order:
 <br>
 And the list goes on, I am stopping now. Almost nothing is perfect. The question is, is it good enough?
 
-
-
-|   presentation.pdf
-|   presentation.pptx
-|   README.md
-|   student - Copy.ipynb
-|   student .ipynb
-|   student.pdf
-|
-|
-+---assets (contains pictures)
-|
-+---backup notebook (old and backup notebooks)
-| 
-| 
-\---data
-        cleaned.csv
-        column_names.md
-        kc_house_data.csv
-        kc_house_data_df.csv
-        kc_house_data_df_outlier_removed.csv
-        wa_washington_zip_codes_geo.min.json
