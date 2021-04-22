@@ -2445,18 +2445,18 @@ Accuracy of this model is around 61% indicated by r square. None of them have si
 
 Now looking at the betas I can see the relationships: 
 ___
-| Feature                              | Coeffs (beta_0) | Comment                                                                                           | can control? |
-|--------------------------------------|--------------------|---------------------------------------------------------------------------------------------------|--------------|
-| Intercept                            | 330578.76          | Necessary to facilitate regression. OLS line goes through this on the y-axis                      |              |
-| C(condition)[T.2.468888440743516]    | 179403.32          | Positive relation, can expect to see this much improvement of value for every additional point    | yes          |
-| C(condition)[T.0.9195310230918753]   | 147676.79          | Positive relation, can expect to see this much improvement of value for every additional point    | yes          |
-| C(condition)[T.-0.6298263945597655]  | 128191.14          | Positive relation, can expect to see this much improvement of value for every additional point    | yes          |
-| sqft_living                          | 85367.37           | Positive relation, can expect to see this much improvement of value for every additional sqft     | yes          |
-| sqft_living15                        | 66830.29           | Positive relation, can expect to see this much improvement of value for every additional point    | indirectly   |
-| C(is_renovated)[T.5.692364186649059] | 65018.78           | Positive relation, can expect to see this much improvement of value if renovated                  | yes          |
-| C(condition)[T.-2.1791838122114062]  | 59428.20           | Positive relation, can expect to see this much improvement of value for every additional point    | yes          |
-| sqft_lot                             | 19286.77           | Positive relation, can expect to see this much improvement of value for every additional sqft     | yes          |
-| distance_from_downtown_mile          | -94392.33          | Negative relation, can expect to see this much improvement of value for every additional distance | no           |
+|  Feature                               | Coefs (beta 0) |  Comment                                                                                              |  can   control?  |
+|----------------------------------------|----------------|-------------------------------------------------------------------------------------------------------|------------------|
+| Intercept                              | 318876.68      | Necessary   to facilitate regression. OLS line goes through this on the y-axis                        |                  |
+| C(condition)[T.2.0]                    | 179403.32      | Positive   relation, can expect to see this much improvement of value for every   additional point    | yes              |
+| C(condition)[T.1.0]                    | 147676.79      | Positive   relation, can expect to see this much improvement of value for every   additional point    | yes              |
+| C(condition)[T.0.0]                    | 128191.14      | Positive   relation, can expect to see this much improvement of value for every   additional point    | yes              |
+| C(condition)[T.-1.0]                   | 59428.2        | Positive relation, can expect to see this much improvement of value for   every additional point      | yes              |
+| sqft_living                            | 115084.21      | Positive   relation, can expect to see this much improvement of value for every   additional sqft     | yes              |
+| sqft_living15                          | 87733.31       | Positive   relation, can expect to see this much improvement of value for every   additional point    | indirectly       |
+| C(is_renovated)[T.1.0]                 | 65018.78       | Positive   relation, can expect to see this much improvement of value if renovated                    | yes              |
+| sqft_lot                               | 2527.89        | Positive   relation, can expect to see this much improvement of value for every   additional sqft     | yes              |
+| distance_from_downtown_mile            | -139378.32     | Negative   relation, can expect to see this much improvement of value for every   additional distance | no               |
 
 
 
@@ -2511,6 +2511,7 @@ I would like to go through these steps, in no particular order:
 
 - Modeling
  * try another method for RFE. e.g. tree based - random forest. RFECV - Recursive Feature Elimination with Cross Validation, RFE Hyperparameters tuning (really dont know much about this much at this time).
+ * Measure interaction.
  * use cross validation a.k.a. rotation estimation. e.g. k-fold cross-validation, Repeated random sub-sampling validation a.k.a. Monte Carlo Simulation.
  * make train-test split and compare predictive power.
  * use some other metric other than r square. e.g. RMSE, p value, coefficients.
@@ -2519,3 +2520,25 @@ I would like to go through these steps, in no particular order:
 <br>
 And the list goes on, I am stopping now. Almost nothing is perfect. The question is, is it good enough?
 
+
+
+|   presentation.pdf
+|   presentation.pptx
+|   README.md
+|   student - Copy.ipynb
+|   student .ipynb
+|   student.pdf
+|
+|
++---assets (contains pictures)
+|
++---backup notebook (old and backup notebooks)
+| 
+| 
+\---data
+        cleaned.csv
+        column_names.md
+        kc_house_data.csv
+        kc_house_data_df.csv
+        kc_house_data_df_outlier_removed.csv
+        wa_washington_zip_codes_geo.min.json
