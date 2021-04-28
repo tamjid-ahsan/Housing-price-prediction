@@ -310,7 +310,7 @@ Across the board outlier removal by using IQR is the winner. Stats for that is:
     Total data loss: 6.89%
     
 
-There are few extremely big values in distance_from_downtown feature, now removing this. Thresh hold is more than 40 miles was be dropped. There awere 18 outliers. So the dataset size is 19975.
+There are few extremely big values in distance_from_downtown feature, which were removed. Thresh hold for this is that houses with distance of more than 40 miles were dropped. There were 18 outliers. So the final dataset size is 19975.
 
 ## Ordinary Least Squares
 Formula that I used for regression.
