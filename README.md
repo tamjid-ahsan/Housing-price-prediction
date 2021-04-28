@@ -1211,7 +1211,7 @@ Output:
     
 
 
-The I preceded to dropping `sqft_above` from the data set. Also dropping redundant location feature `lat` and `long` and `zipcode`. Then I checked for impact of `price_per_sqft` on the model. It is derived from the target.
+Then I preceded to dropping `sqft_above` from the data set. Also dropped redundant location feature `lat` and `long` and `zipcode`. Then I checked for impact of `price_per_sqft` on the model, hence it is derived from the target.
 Also dropped `price_per_sqft` ater finding out it was leaking information. There is a huge impact of this on the r squared, around 12%. Adding this will see a dramatic performance improvent of the model r_sq. But colinearity is a issue, althoug can not detect it in the final model. 
 
 
