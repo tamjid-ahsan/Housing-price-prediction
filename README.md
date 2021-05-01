@@ -1256,12 +1256,6 @@ It has 6 features with high p value, and residual plots are abnormal indicating 
 ## Check for multicolinerity
 
 
-```python
-# Visually
-heatmap_DataFrame(df_model_2)
-```
-
-
     
 ![png](./assets/output_213_0.png)
     
