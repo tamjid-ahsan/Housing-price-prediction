@@ -1,10 +1,3 @@
-Please fill out:
-* Student name: Tamjid Ahsan
-* Student pace: Full Time
-* Scheduled project review date/time: 
-* Instructor name: James Irving
-* Blog post URL:
-
 # INTRODUCTION
 
 ## Overview
@@ -32,6 +25,8 @@ Those include:
 - How to improve marketability.
 - Focus on which aspect of the house.
 - What factors to keep in mind deciding budget and required return on investment.
+
+I loosely followed OSEMiN framework for organizing this analysis.
 
 # OBTAIN
 
@@ -98,40 +93,15 @@ Then checked for outliers. I seems that there are many.
 ## Initial cleaning
 
 
-```python
-# cleaning data
-
-# drop duplicates based on id column
-df = df[~df.duplicated(['id'], keep='first')]
-# reseting index
-df = df.reset_index().drop('index', axis=1, errors='ignore')
-
-# converting date to datetime
-df.loc[:, 'date'] = pd.to_datetime(df['date'], infer_datetime_format=True)
-
-# nan and error handeling
-# waterfront
-df.loc[:, 'waterfront'] = df['waterfront'].replace({np.nan: 0})
-df.loc[:, 'waterfront'] = df['waterfront'].astype('int')
-# view
-df.loc[:, 'view'] = df['view'].replace({np.nan: 0})
-# yr_renovated
-df.loc[:, 'yr_renovated'] = df['yr_renovated'].replace({np.nan: 0})
-df.loc[:, 'yr_renovated'] = df['yr_renovated'].astype('int')
-# sqft_basement
-df.loc[:, 'sqft_basement'] = df['sqft_basement'].replace({'?': 0})
-df.loc[:, 'sqft_basement'] = pd.to_numeric(df['sqft_basement'],
-                                           errors="coerce")
-df.loc[:, 'sqft_basement'] = df['sqft_basement'].astype('int')
-```
+ * Dropped duplicates from `id` column
+ * Converted `date` to datetime dtype
+ * Replaced missing (Nan and "?") rows to 0 in `waterfront`, `view`, `yr_renovated`, `sqft_basement`.
+ 
+ My reasoning for filling with 0 is that, it is relatively safe to assume that the house does not have waterfront, was not renovated and does not have basement. Alternatively I could have simply dropped those from the dataset. Filling with mean or mode has the same drawback as filling with 0 because of the pattern of missing values, so I filled in with 0.
+ 
+ Then I dropped a row where bedroom was 33. It is clearly a mistake in data entry, as it does not match with the sqft of that house. Could have filled that to 3, but did not do so as the data loss is negligible. 
 
 
-```python
-# droping possible error in input
-df = df[df['bedrooms']!=33]
-# reseting index
-df = df.reset_index().drop('index', axis=1, errors='ignore')
-```
 
 ## Features added
 ### Price per sqft
@@ -139,77 +109,41 @@ df = df.reset_index().drop('index', axis=1, errors='ignore')
 Ratio of price of each house over total sqft of that.
 
 
-```python
-df['price_per_sqft'] = round(df['price']/(df['sqft_lot']+df['sqft_living']),2)
-```
-
-
-
 ### Neighborhood
 
-boolean feature to check that Total sqft of a house is within 40% to 60% range of average of total sqft of surrounding 15 house to detect unusual house in the neighborhood. This is a check for unusual homes.
+Created a boolean feature to check that Total sqft of a house is within 40% to 60% range of average of total sqft of surrounding 15 house to detect unusual house in the neighborhood. This is a check for unusual homes.
 
-
-```python
-sum_sqft_n = (df['sqft_lot'] + df['sqft_living'])
-sum_sqft_15 = (df['sqft_lot15'] + df['sqft_living15'])
-df['total_sqft_larger_than_neighbours'] = ((sum_sqft_15 * .4 <= sum_sqft_n) &
-                                           (sum_sqft_n <= sum_sqft_15 * .6))
-df['total_sqft_larger_than_neighbours'] = df[
-    'total_sqft_larger_than_neighbours'].apply(lambda x: 1 if x == True else 0)
-
-```
 
 
 ### Is Renovated
 
-    Out of 21419 values, 20679 are empty while only 740 rows containing year renovated. This is not usefull for the model. So this feature is converted to a boolean, where 1 means it is renovated and 0 means it not renovated.
+Out of 21419 values, 20679 are empty while only 740 rows containing year renovated. This is not usefull for the model. So this feature is converted to a boolean, where 1 means it is renovated and 0 means it not renovated.
     
-
-
-```python
-df['is_renovated'] = df['yr_renovated'].apply(lambda x: 0
-                                              if x == 0 else 1)
-```
-
-
-```python
-# checking that this worked by showing value counts
-df['is_renovated'].value_counts()
-```
-
-
-
-
-    0    20679
-    1      740
-    Name: is_renovated, dtype: int64
-
-
 
 
 ## Categorical and Numerical  features
 
 ### Identifying
-
+based on information from the readme file attached to the dataset.
 ```python
-# based on information from the readme file attached to the dataset.
 # House identifier
 unique_feat_df = ['id']
+
 # Catagorical features
-categorical_feat_df = [
-    'waterfront', 'view', 'condition', 'grade', 'is_renovated'
-]
-# Continuous features
+categorical_feat_df = ['waterfront', 'view', 'condition', 'grade', 'is_renovated']
+
+# Numeric features
 numerical_continuous_feat_df = [
     'price', 'sqft_living', 'sqft_lot', 'sqft_above', 'sqft_basement',
     'sqft_living15', 'sqft_lot15', 'price_per_sqft',
     'distance_from_downtown_mile', 'total_sqft_larger_than_neighbours',
-    'price_per_sqft'
-]
+    'price_per_sqft']
+
 numerical_discrete_feat_df = ['bedrooms', 'bathrooms', 'floors']
+
 # Timing features
 time_feat_df = ['date', 'yr_built', 'yr_renovated']
+
 # Location feat
 location_feat_df = ['lat', 'long', 'zipcode']
 ```
@@ -222,10 +156,6 @@ In the Dataframe for initial model `id`, `date`, `yr_renovated`, and `view` is n
 - `date`: Sale date is not important input for now as I am not capturing seasonality of value for this analysis.
 - `yr_renovated`: Already converted to boolean column.
 - `view`: Not sure about this feature what it really means as not much information is provided. This can also be a categorical or numeric feature.
-
-```python
-df_model = df.drop(columns=['id', 'date','yr_renovated','view'])
-```
 
 ## Feature relationships
 
@@ -257,8 +187,6 @@ Now I tried to make sense of `"view"`. It seems like it detects the aesthetic qu
 Higher rated house has the greatest average price. This trend is very clear.
 
 It seems that houses closer to the downtown has a higher price per sqft but lower view as the city landscape is not pristine but proximity to business center makes them desirable. But at the next category price drops as distance increases, people are not shelling coins for sub-par property. When the distance is high means we are out of downtown with less congested area where view is better, thus increase in price. Then at the last one we are at the suburbs, where price sees a drop because of distance.
-
-The boxed area is the highest rating lowest price.
 
 This feature is still sufficiently ambiguous to present to the public, I might be interpreting this from a myopic view and got entirely wrong. 
 
@@ -382,10 +310,10 @@ Across the board outlier removal by using IQR is the winner. Stats for that is:
     Total data loss: 6.89%
     
 
-There are few extremely big values in distance_from_downtown feature, now removing this. Thresh hold is more than 40 miles was be dropped. There awere 18 outliers. So the dataset size is 19975.
+There are few extremely big values in distance_from_downtown feature, which were removed. Thresh hold for this is that houses with distance of more than 40 miles were dropped. There were 18 outliers. So the final dataset size is 19975.
 
-### Ordinary Least Squares
-Formula that used for regression
+## Ordinary Least Squares
+Formula that I used for regression.
 
 
 ```python
@@ -481,9 +409,9 @@ def OLS_sm(df,
     return multiple_regression
 ```
 
-Lets take a quick look at a regression.
+## Lets take a quick look at a regression.
 
- With outlier
+ ## With outlier
 
 
 
@@ -851,22 +779,8 @@ Lets take a quick look at a regression.
     
 
 
-And without outliers.
-```python
-x2 = OLS_sm(df=df_model_2,
-              numeric_features=[
-                  'bedrooms', 'bathrooms', 'sqft_living', 'sqft_lot', 'floors',
-                  'sqft_above', 'sqft_basement', 'yr_built', 'lat', 'long',
-                  'sqft_living15', 'sqft_lot15', 'distance_from_downtown_mile',
-                  'price_per_sqft'
-              ],
-              dependant_var='price',
-              categorical_features=[
-                  'waterfront', 'condition', 'grade', 'is_renovated',
-                  'zipcode', 'total_sqft_larger_than_neighbours'
-              ],
-              verbose=False)
-```
+## And without outliers.
+
 
     Formula for the OLS model:  price ~ bedrooms + bathrooms + sqft_living + sqft_lot + floors + sqft_above + sqft_basement + yr_built + lat + long + sqft_living15 + sqft_lot15 + distance_from_downtown_mile + price_per_sqft + C(waterfront) + C(condition) + C(grade) + C(is_renovated) + C(zipcode) + C(total_sqft_larger_than_neighbours)
     
@@ -1241,12 +1155,14 @@ To get a better result then I scaled data.
 
 ## Scaling
 
+For scaling I used RobustScaler from scikit-learn.
+
 Robust statistics have good  performance when distributions  are not normal. These robust estimators typically have inferior statistical efficiency compared to conventional estimators for data drawn from a distribution without outliers (such as a normal distribution), but have superior efficiency for data drawn from a mixture distribution or from a heavy-tailed distribution, for which non-robust measures such as the standard deviation should not be used.
 
 This matches the dataset characteristics.
 
 
-Then I scaled data based on mean and IQR range
+Then I scaled data based on mean and IQR range. I got two version of this. One with everything scaled, another left the target, i.e., dependant variable which is `price` intact. The later will be better for interpretation in layman's term of the regression coeff results. Only used that in the last model.
 
 
 A few sample of those are here.
@@ -1265,12 +1181,11 @@ A few sample of those are here.
 
 
 
-I have got two versions of these. One with everything encoded. One with target variable unscaled, which makes results interpretable in plain language. Only used that in the last model.
 
 ## Check for multicolinerity
 
 
-
+Function used to get correlated features
 ```python
 def correlation_feat(df, threshold=0.75):
   """
@@ -1287,37 +1202,35 @@ def correlation_feat(df, threshold=0.75):
     return feature_corr
 ```
 
+Used this on the dataframe for modeling. Thresh hold was 0.75.
 
-```python
-corr_features = correlation_feat(df_model_2, 0.75)
-print('correlated features: ', len(set(corr_features)))
-print('correlated features: ', corr_features)
-```
+Output:
 
     correlated features:  1
     correlated features:  {'sqft_above'}
     
 
 
-Dropping `sqft_above` from the data set. Also dropping redundant location feature `lat` and `long` and `zipcode` and price_per_sqft. After getting impact of this, might drop it later.
-Also dropped `price_per_sqft` ater finding out it was leaking information. Adding this will see a dramatic performance improvent of the model r_sq. But colinearity is a issue, althoug can not detect it in the final model. 
+Then I preceded to dropping `sqft_above` from the data set. Also dropped redundant location feature `lat` and `long` and `zipcode`. Then I checked for impact of `price_per_sqft` on the model, hence it is derived from the target.
+Also dropped `price_per_sqft` ater finding out it was leaking information. There is a huge impact of this on the r squared, around 12%. Adding this will see a dramatic performance improvent of the model r_sq. But colinearity is a issue, althoug can not detect it in the final model. 
 
 
 
 ## One Hot Encoding
 
-Then I one hot encoded the data for later use. I got two versions of this.
+Then I one hot encoded the data for later use. And moved on to feature selection.
 
 
 ## Feature selection
 
 ### Filter methods
 
-Already applied filtering by correlation.
+Already applied this when filtering features by correlation.
 
 ### Wrapper  methods
 
 #### Forward Selection using Statsmodels
+
 
 Using this a guideline.
 
@@ -1435,7 +1348,7 @@ Displaying one of those to get insight.
     
 
 
-Optimal number of features where diminishing return starts to occur is at around 8. Also got a list of recommendation.
+Optimal number of features where diminishing return starts to occur is at around 7. Also got a list of recommendation.
 
 
 
@@ -1453,43 +1366,14 @@ y = df_model_processed_ohe['price'].copy()
 linreg = LinearRegression(n_jobs=8)
 selector = RFE(linreg ,n_features_to_select=6) 
 selector = selector.fit(X, y.values.ravel())
-```
 
-
-```python
-selector.support_
-```
-
-
-
-
-    array([False, False,  True, False, False, False, False, False, False,
-            True,  True, False, False, False, False,  True,  True,  True,
-           False, False, False, False, False, False, False, False])
-
-
-
-
-```python
-selector.ranking_ #The feature ranking
-```
-
-
-
-
-    array([17, 14,  1, 20, 18, 15, 12,  7, 21,  1,  1, 11, 10,  9,  6,  1,  1,
-            1,  2,  3, 16,  8,  4, 13,  5, 19])
-
-
-
-
-```python
 features_selection = pd.DataFrame(list(
     zip(X.columns.to_list(), selector.support_.tolist(),
         selector.ranking_.tolist())),
                                    columns=['Feature', 'keep', 'ranking'])
 features_selection.sort_values(by="ranking", ascending=True)
 ```
+
 ```
 This is the feature ranking report.
 ```
@@ -1667,44 +1551,9 @@ This is the feature ranking report.
 
 
 
-```python
-features_selection.Feature.to_list()
 ```
-
-
-
-
-    ['bedrooms',
-     'bathrooms',
-     'sqft_living',
-     'sqft_lot',
-     'floors',
-     'sqft_basement',
-     'yr_built',
-     'sqft_living15',
-     'sqft_lot15',
-     'distance_from_downtown_mile',
-     'waterfront_1',
-     'condition_1',
-     'condition_0',
-     'condition_1',
-     'condition_2',
-     'grade_3',
-     'grade_2',
-     'grade_1',
-     'grade_0',
-     'grade_1',
-     'grade_2',
-     'grade_3',
-     'grade_4',
-     'grade_5',
-     'is_renovated_1',
-     'total_sqft_larger_than_neighbours_1']
-
-
-
-Then I tested a model with these insights.
-
+Then I initiated a model with these insights.
+```
 
     Formula for the OLS model:  price ~ bedrooms + bathrooms + sqft_living + sqft_lot + floors + sqft_basement + yr_built + sqft_living15 + sqft_lot15 + distance_from_downtown_mile + waterfront_1 + condition_1 + condition_0 + condition_1 + condition_2 + grade_3 + grade_2 + grade_1 + grade_0 + grade_1 + grade_2 + grade_3 + grade_4 + grade_5 + is_renovated_1 + total_sqft_larger_than_neighbours_1
     
@@ -1846,7 +1695,7 @@ Then I tested a model with these insights.
     
 ![png](./assets/output_212_2.png)
     
-Few high p_value detected. So dropped those.
+Few high p_value detected. So dropped those in the next iteration.
 
 
 
@@ -2026,15 +1875,7 @@ set(RFE_recom + Forward_selection)
 
 ## Experiment 1
 
-```python
-fin = OLS_sm(
-    df=df_model_2,
-    numeric_features=[
-        'distance_from_downtown_mile', 'sqft_living', 'sqft_living15',
-        'sqft_lot', 'yr_built'
-    ],
-    categorical_features=['condition', 'grade', 'is_renovated', 'waterfront'])
-```
+
 
     Formula for the OLS model:  price ~ distance_from_downtown_mile + sqft_living + sqft_living15 + sqft_lot + yr_built + C(condition) + C(grade) + C(is_renovated) + C(waterfront)
     
@@ -2166,15 +2007,6 @@ Some high p value detected. Dropping these for next iteration of model.
 
 
 ## Experiment 2
-```python
-fin = OLS_sm(
-    df=df_model_2,
-    numeric_features=[
-        'distance_from_downtown_mile', 'sqft_living', 'sqft_living15',
-        'sqft_lot', 'yr_built'
-    ],
-    categorical_features=[ 'is_renovated', 'waterfront'])
-```
 
     Formula for the OLS model:  price ~ distance_from_downtown_mile + sqft_living + sqft_living15 + sqft_lot + yr_built + C(is_renovated) + C(waterfront)
     
@@ -2267,18 +2099,8 @@ fin = OLS_sm(
 ## Final model
 I can go on doing this. But This is my final model. As there is no other significant p values left. And swapping features not going to help beyond this, as I already hit the diminishing return point. 
 
-Being said that I am throwing condition in the mix. removed waterfront as there is less control over that and removed yr_built as a result of high p_val. Most importantly, because it is recommended by RFE.
+Being said that I am throwing condition in the mix. Removed waterfront as there is less control over that by the homeowner and removed yr_built as a result of it having high p_val. Most importantly, because it is recommended by RFE.
 
-
-```python
-final = OLS_sm(
-    df=df_for_last_step,
-    numeric_features=[
-        'distance_from_downtown_mile', 'sqft_living', 'sqft_living15',
-        'sqft_lot'
-    ],
-    categorical_features=[ 'is_renovated', 'condition'])
-```
 
     Formula for the OLS model:  price ~ distance_from_downtown_mile + sqft_living + sqft_living15 + sqft_lot + C(is_renovated) + C(condition)
     
@@ -2375,12 +2197,6 @@ final = OLS_sm(
 I can see a little improvement here. So this is the model I am gonna go forward with. One category of condition had a good impact on r square. Also swapped model to a one containing unscaled price. Which will help me interpret coefficients better. 
 
 
-```python
-round(pd.DataFrame(final.params).sort_values(by=0,ascending=False),2)
-```
-
-
-
 
 <div>
 
@@ -2388,7 +2204,7 @@ round(pd.DataFrame(final.params).sort_values(by=0,ascending=False),2)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>0</th>
+      <th>Coeffs</th>
     </tr>
   </thead>
   <tbody>
@@ -2438,6 +2254,7 @@ round(pd.DataFrame(final.params).sort_values(by=0,ascending=False),2)
 
 
 
+<br>
 
 # iNTERPRET
 
@@ -2465,14 +2282,16 @@ ___
 
 
 
-Q-Q plot of residuals looks good, but the scatter plot is messy, indicating some bias. This is because of the nature of the data.
+Q-Q plot of residuals looks good, but the scatter plot is messy, indicating some bias. This is because of the nature of the data, which I don't think can be totally eliminated.
 <br>
 <br>
 Harsh outlier removal has impact on the result.
 
-This is better from the base model, with every thing except r square. But the base model failed in everything except that, did not even satisfy some assumptions.
+This is better from the base model, with every thing except r square. But the base model failed in everything except that, did not even satisfy some assumptions. Reseduals are more normally(!) distributed. Beacuse of feature elimination process the r square took a massive hit.
 
-Adding more feature has a direct relation with r square. And leaving more outliers has a impact on the residuals distribution. One of the core assumptions of liner regression. Liner regression for this type of data alright, it tries to predict a specific price. In real life for this type of property use of range rather than accuracy is more appropriate. There are a lot of models out there for prediction. I dont know all of them. For that range calculation maybe a tree based model is better. I have little exposure to that right now. Liner regression is a widely use technique for prediction of price. Depending on target the r square varies.
+Adding more feature has a direct relation with r square in linear regression. And leaving more outliers has a impact on the residuals distribution, one of the core assumptions of liner regression. Liner regression for this type of data alright, it tries to predict a specific price. In real life for this type of property use of range rather than exact price accuracy is more appropriate. There are a lot of models out there for prediction. Alas, I dont know all of them. For that range calculation maybe a tree based model is better. I have little exposure to that right now. Being said that, Liner regression is a widely used and accepted technique for prediction of price.
+
+<br>
 
 # RECOMMENDATIONS & CONCLUSIONS
 
@@ -2492,16 +2311,12 @@ Homeowners should focus to:
 
 Then they can observe a substantial improvement of their house value.
 
-# Appendix
-
-## Next Steps 
-<br>
-If I had the gift of time.
+# Next Steps 
 
 I would like to go through these steps, in no particular order:
 
-- data collecting
- - try a model with unscaled dependent variable; price and see the impact on model performance. That will help me better explain the data. But if not reporting those the the sign alone is enough. 
+Data collecting
+ * try a model with unscaled dependent variable; price and see the impact on model performance. That will help me better explain the data. But if not reporting those the the sign alone is enough. 
  * engineered more features. e.g. total house sqft, bedroom to bathroom ratio.
  * process date as year, or split it to year and month and try to capture seasonality of value on listing timing.
  * bin some features. e.g. year built by decades or something; bedrooms in single, typical, and large.
@@ -2509,7 +2324,7 @@ I would like to go through these steps, in no particular order:
  * get some other monetary (e.g. average property price), and cultural and recreational (e.g. proximity to some stadium, local restaurant density, public transport, schools, parks) info about the locations. I am not sure how to get all those info.
  * get some more info about view and include in the analysis. LOCATION does matter in the real estate business.
 
-- Modeling
+Modeling
  * try another method for RFE. e.g. tree based - random forest. RFECV - Recursive Feature Elimination with Cross Validation, RFE Hyperparameters tuning (really dont know much about this much at this time).
  * Measure interaction.
  * use cross validation a.k.a. rotation estimation. e.g. k-fold cross-validation, Repeated random sub-sampling validation a.k.a. Monte Carlo Simulation.
@@ -2518,5 +2333,5 @@ I would like to go through these steps, in no particular order:
  * try other features in in model. go for an exhaustive search. 
 
 <br>
-And the list goes on, I am stopping now. Almost nothing is perfect. The question is, is it good enough?
+And the list goes on...
 
