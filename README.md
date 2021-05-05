@@ -32,7 +32,7 @@ Those include:
 - Focus on which aspect of the house.
 - What factors to keep in mind deciding budget and required return on investment.
 
-
+I am going to lossely follow OSEMiN framework for this analysis.
 # OBTAIN
 
 Data for this analysis was provided as part of phase two project of [The Flatiron School](https://flatironschool.com/) Full Time Online Data Science program. This a fork of [that](https://github.com/learn-co-curriculum/dsc-phase-2-project). The csv file named `kc_house_data.csv` contains following information in this repository located at `./data/kc_house_data.csv`.
@@ -1093,7 +1093,7 @@ There are few extremely big values in distance_from_downtown feature, which were
 
 ## Ordinary Least Squares Regression
 
-
+I used this function for majority of my regression analysis.
 ```python
 def OLS_sm(df,
            dependant_var='price',
@@ -1301,7 +1301,7 @@ Now setting my thresh hold at .75 to drop feature. Decided to drop `sqft_above` 
 
 ### Dropping feature
 
-Dropping `sqft_above` from the data set. also dropping redundant location feature `lat` and `long`.. And for `price_per_sqft`, I dropped it, after getting impact of this on the model. 
+Dropping `sqft_above` from the data set. also dropping redundant location feature `lat` and `long`. And for `price_per_sqft`, I dropped it, after getting impact of this on the model. 
 
 
 ```python
@@ -1389,7 +1389,7 @@ On all data
 ![im](./assets/i2.png)
 
 
-This can be somewhat helpful for selecting features. This is not a foolproof way of selecting features as this does not capture the combined power of features for explanation, not even the preffered way. This can be used to come up with a preliminary model and iterate upon it.
+This can be somewhat helpful for selecting features. This is not a foolproof way of selecting features as this does not capture the combined power of features for explanation, this is not even the preffered way. This can be used to come up with a preliminary model and iterate upon it.
 
 `price` has perfect relationship with except and can explain it fully, this is very much expected. rest of the features are of interest.
 * `grade`, `sqft_living`, `zipcode` have very good explaining power. Should be present in the model.
@@ -1419,13 +1419,13 @@ Note on Jarque–Bera test:
     
 
 
-I can spot some counter intuitive results as per common sense and domain knowledge. According to this `grade` and `condition` are not significant as those have very high p values. Where `grade` has good explaining power but `condition` does not. 
+Here, I can spot some counter intuitive results as per common sense and domain knowledge. According to this `grade` and `condition` are not significant as those have very high p values. Where `grade` has good explaining power but `condition` does not. 
 
-`zipcode` has 70 categories inside with varying params for each, thus it having high p values can be excepted. 
+`zipcode` has 70 categories inside with varying params for each, thus it having high p values is understandable. 
 
 
 <br>
-I am looking at features isolated which might be causing this. Their combined effect can be much different. 
+Up next, I am looking at features isolated which might be causing this. Their combined effect can be much different. 
 
 
  
@@ -1480,13 +1480,11 @@ I have searched for ideal bag of features using forward selection method, RFE an
 ___
 #### **Final model**
 
-Lets use that one on unscaled price to be able to interpret the coeffs better. In fact scaling has little to no impact on the outcome of the model.
+Lets use those selected features on unscaled `price` to be able to interpret the coeffs better. It is observed that, scaling has little to no impact on the outcome of the model.
 
 Same analysis and interpretation as the above one as the model result did not see any change using unscaled `price`. Made me wonder, was scaling necessary or helpful for this analysis? It does, but very minimal. Not showing the results as they are mostly the same.
 
 # iNTERPRET
-
-
 
 
 This model can explain 81% of data indicated by r square. None of them have significant p value. No collinearity detected. 
@@ -1509,7 +1507,7 @@ ___
 | C(condition)[T.4.0] | 62977.09 |  positive  | Higher condition means better value | yes |
 | C(condition)[T.3.0] | 42254.24 |  positive  | Higher condition means better value | yes |
 
-More nuanced analysis can be done on `floors`, `bedroom` and `sqft_basement` by considering them as categorical data for inference and explicit recommendation.
+More nuanced analysis can be done on `floors`, `bedroom` and `sqft_basement` by considering them as categorical data for inference and provide explicit recommendation. Those could also be binned. Condition less than 3 were dropped in the outlier remeval process.
 
 zipcodes has varying impact on the house value depending on which zipcode it is. The take away is zipcodes have strong relation with the price. Some are positive some are negative. Negative ones can expect less value. 
 ___
@@ -1603,9 +1601,9 @@ Harsh outlier removal has impact on the result.
 
 
 
-This is better from the base model, with every thing except r square. But the base model failed in everything except that, did not even satisfy some assumptions.
+This is better from the base model, with every thing except r squared. But the base model failed in everything except that, did not even satisfy some assumptions for linar regression.
 
-Adding more feature has a direct relation with r square. And leaving more outliers has a impact on the residuals distribution. One of the core assumptions of liner regression. Liner regression for this type of data alright, it tries to predict a specific price. In real life for this type of property use of range rather than accuracy is more appropriate. There are a lot of models out there for prediction. I dont know all of them. For that range calculation maybe a tree based model is better. I have little exposure to that right now. Liner regression is a widely use technique for prediction of price. Depending on target the r square varies.
+Adding more feature has a direct relation with r square. And leaving more outliers has a impact on the residuals distribution. One of the core assumptions of liner regression. Liner regression for this type of data alright, it tries to predict a specific price. In real life for this type of property use of range rather than accuracy maybe more appropriate, depending on the use case. There are a lot of models out there for prediction. For that range calculation maybe a tree based model is better or even classification. Liner regression is a widely use technique for prediction of price. 
 
 # RECOMMENDATIONS & CONCLUSIONS
 
@@ -1626,6 +1624,11 @@ Homeowners should focus to:
 Then they can observe a substantial improvement of their house value.
 
 <h1 style ="background-color:green; color:white"> Appendix </h1>
+
+## Where to find notebook
+
+Notebook accompanying this analysis can be found in in the root of the repository named `student.ipynb`. A pdf version is also there. For the detailed one with additional work check `student_detailed.ipynb`. Presentation for this is also in the root named `presentation.pptx` with a pdf version `presentation.pdf`. All the data is inside `/Data/` folder, labeled appropriately.
+
 
 ## Next Steps 
 
